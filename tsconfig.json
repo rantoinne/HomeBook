@@ -19,9 +19,9 @@
     "typeRoots": ["./src/types"],
     "baseUrl": "./",
     "paths": {
-      "@images": ["assets/images"],
+      "@images": ["src/assets/images"],
     }
   },
   "exclude": ["node_modules"],
-  "include": ["index.js", "src", "lib", "test", "assets"]
+  "include": ["index.js", "src", "lib", "test"]
 }
