@@ -20,6 +20,7 @@
     "baseUrl": "./",
     "paths": {
       "@images": ["src/assets/images"],
+      "@utils": ["src/utils"],
     }
   },
   "exclude": ["node_modules"],
