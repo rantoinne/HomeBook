@@ -4,7 +4,7 @@ import {
 } from "@utils";
 
 /**
- * @returns type COLOR_CODES based on theme
+ * @returns @type {COLOR_CODES} based on theme
  */
 export const getCurrentTheme = () => {
   const isDarkThemeActive = true;
