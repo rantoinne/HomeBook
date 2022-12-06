@@ -17,3 +17,12 @@ export enum PADDINGS {
   MEDIUM = 12,
   X_LARGE = 24,
 }
+
+export enum IMAGE_DIMENSIONS {
+  SMALL = 18,
+  LARGE = 32,
+  MEDIUM = 28,
+  REGULAR = 24,
+  X_SMALL = 14,
+  XX_SMALL = 12,
+}

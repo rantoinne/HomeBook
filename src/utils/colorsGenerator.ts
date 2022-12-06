@@ -24,4 +24,4 @@ export const getGradientColors = () => {
  * @returns A color palette with current
  * theme selected
  */
-export const theme = getCurrentTheme();
+export const THEME = getCurrentTheme();

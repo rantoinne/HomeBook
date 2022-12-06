@@ -1,14 +1,14 @@
-import { theme } from '@utils';
+import { THEME } from '@utils';
 import { Platform, StyleSheet } from 'react-native';
 
-const shadowColor = theme.SHADOW;
+const shadowColor = THEME.SHADOW;
 
 const styles = StyleSheet.create({
   containerStyle: {
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 4,
-    backgroundColor: theme.SECONDARY,
+    backgroundColor: THEME.SECONDARY,
     ...Platform.select({
       ios: {
         shadowOffset: {

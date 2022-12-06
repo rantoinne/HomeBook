@@ -5,9 +5,9 @@ import {
   View,
 } from 'react-native';
 import {
-  ElevatedCard,
+  InputField,
 } from '@components';
-
+import { ImageLinks } from '@images';
 
 const App = () => {
   return (
@@ -15,9 +15,12 @@ const App = () => {
       <View style={{ width: 200, height: 200}}>
         <Text>TEST</Text>
       </View>
-      <ElevatedCard>
-        <Text>Hey Doc!</Text>
-      </ElevatedCard>
+      <InputField
+        value={'1'}
+        leftIcon={ImageLinks.homeBookIcon}
+        rightIcon={ImageLinks.homeBookIcon}
+        onChangeText={null}
+      />
     </SafeAreaView>
   );
 };

@@ -1,6 +1,6 @@
 import { StyleSheet, View, ViewStyle } from 'react-native';
 import React, { FC, PropsWithChildren } from 'react';
-import { COLOR_CODES_FOR_DARK_THEME, COLOR_CODES_FOR_LIGHT_THEME, covertStyle, theme } from '@utils';
+import { COLOR_CODES_FOR_DARK_THEME, COLOR_CODES_FOR_LIGHT_THEME, covertStyle, THEME } from '@utils';
 
 import styles from './styles';
 
@@ -21,7 +21,7 @@ export const ElevatedCard: FC<PropsWithChildren<Props>> = ({
   shadowColor,
 }): React.ReactElement => {
   if (!shadowColor) {
-    shadowColor = theme.SHADOW;
+    shadowColor = THEME.SHADOW;
   }
   
   styles.containerStyle = covertStyle(
