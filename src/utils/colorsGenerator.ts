@@ -1,16 +1,11 @@
-import {
-  COLOR_CODES_FOR_DARK_THEME,
-  COLOR_CODES_FOR_LIGHT_THEME,
-} from "@utils";
+import { COLOR_CODES_FOR_DARK_THEME, COLOR_CODES_FOR_LIGHT_THEME } from './';
 
 /**
  * @returns @type {COLOR_CODES} based on theme
  */
 export const getCurrentTheme = () => {
-  const isDarkThemeActive = true;
-  return isDarkThemeActive
-    ? COLOR_CODES_FOR_DARK_THEME
-    : COLOR_CODES_FOR_LIGHT_THEME;
+  const isDarkThemeActive = false;
+  return isDarkThemeActive ? COLOR_CODES_FOR_DARK_THEME : COLOR_CODES_FOR_LIGHT_THEME;
 };
 
 /**
@@ -20,8 +15,13 @@ export const getCurrentTheme = () => {
  */
 export const getGradientColors = () => {
   const currentThemePalette = getCurrentTheme();
-  return [
-    currentThemePalette.PRIMARY,
-    currentThemePalette.SECONDARY,
-  ];
+  console.log({ currentThemePalette });
+  
+  return [currentThemePalette.PRIMARY, currentThemePalette.SECONDARY];
 };
+
+/**
+ * @returns A color palette with current
+ * theme selected
+ */
+export const theme = getCurrentTheme();
