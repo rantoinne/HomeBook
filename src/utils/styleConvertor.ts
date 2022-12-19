@@ -4,7 +4,7 @@
  * and their values to update
  * @returns StylePropertiesObject
  */
-export const covertStyle = (
+export const convertStyle = (
   styleObject: any,
   stylesToUpdate: {
     [key: string]: string

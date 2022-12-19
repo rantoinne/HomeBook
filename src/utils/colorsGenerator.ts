@@ -1,4 +1,4 @@
-import { COLOR_CODES_FOR_DARK_THEME, COLOR_CODES_FOR_LIGHT_THEME } from './';
+import { COLOR_CODES_FOR_DARK_THEME, COLOR_CODES_FOR_LIGHT_THEME } from './enums';
 
 /**
  * @returns @type {COLOR_CODES} based on theme
@@ -9,19 +9,16 @@ export const getCurrentTheme = () => {
 };
 
 /**
+ * @returns A color palette with current
+ * theme selected
+ */
+export const THEME = getCurrentTheme();
+
+/**
  * @description Method to get default colors
  * based on theme
  * @returns [COLOR, COLOR]
  */
 export const getGradientColors = () => {
-  const currentThemePalette = getCurrentTheme();
-  console.log({ currentThemePalette });
-  
-  return [currentThemePalette.PRIMARY, currentThemePalette.SECONDARY];
+  return [THEME.PRIMARY, THEME.SECONDARY];
 };
-
-/**
- * @returns A color palette with current
- * theme selected
- */
-export const THEME = getCurrentTheme();

@@ -1,6 +1,6 @@
 import { StyleSheet, View, ViewStyle } from 'react-native';
 import React, { FC, PropsWithChildren } from 'react';
-import { COLOR_CODE_TYPE, covertStyle, THEME } from '@utils';
+import { COLOR_CODE_TYPE, convertStyle, THEME } from '@utils';
 
 import styles from './styles';
 
@@ -24,9 +24,9 @@ export const ElevatedCard: FC<PropsWithChildren<Props>> = ({
     shadowColor = THEME.SHADOW;
   }
   
-  styles.containerStyle = covertStyle(
+  styles.containerStyle = convertStyle(
     styles.containerStyle,
-    [{ 'shadowColor': shadowColor }],
+    [{ shadowColor }],
   );
   
   return (
