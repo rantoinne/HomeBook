@@ -8,6 +8,7 @@ import {
   InputField,
 } from '@components';
 import { ImageLinks } from '@images';
+import { INPUT_TYPE } from './utils/enums';
 
 const App = () => {
   return (
@@ -17,9 +18,11 @@ const App = () => {
       </View>
       <InputField
         value={'1'}
+        type={INPUT_TYPE.OUTLINE}
         leftIcon={ImageLinks.homeBookIcon}
         rightIcon={ImageLinks.homeBookIcon}
         onChangeText={null}
+        multiline
       />
     </SafeAreaView>
   );
