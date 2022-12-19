@@ -2,12 +2,14 @@ export enum COLOR_CODES_FOR_LIGHT_THEME {
   PRIMARY = '#FFFFFF',
   SECONDARY = '#F5F6FA',
   SHADOW = '#2F3542',
+  OUTLINE = '#000000',
 }
 
 export enum COLOR_CODES_FOR_DARK_THEME {
   PRIMARY = '#2F3542',
   SECONDARY = '#2C2C54',
   SHADOW = '#F5F6FA',
+  OUTLINE = '#FFFFFF',
 }
 
 export enum PADDINGS {

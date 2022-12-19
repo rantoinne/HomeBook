@@ -2,61 +2,87 @@ import {
   View,
   TextInput,
   ViewStyle,
+  StyleSheet,
   TextInputProps,
-  Image,
   ImageSourcePropType,
 } from 'react-native';
 import React, { FC } from 'react';
-import { COLOR_CODE_TYPE, PADDINGS, THEME } from '@utils';
+import { COLOR_CODE_TYPE } from '@utils';
 import { IconRenderer } from '../IconRenderer';
+import styles from './styles';
 
 interface Props extends TextInputProps {
-  leftIcon?: ImageSourcePropType;
-  rightIcon?: ImageSourcePropType;
+  inputStyle?: ViewStyle;
   containerStyle?: ViewStyle;
   enableFloatingLabel?: boolean;
   borderColor?: COLOR_CODE_TYPE;
+  leftIconCardStyle?: ViewStyle;
+  rightIconCardStyle?: ViewStyle;
+  leftIcon?: ImageSourcePropType;
+  isLeftIconInsideCard?: boolean;
+  isRightIconInsideCard?: boolean;
+  rightIcon?: ImageSourcePropType;
+  renderLeftIcon?: () => React.ReactElement;
+  renderRightIcon?: () => React.ReactElement;
 }
 
 export const InputField: FC<Props> = ({
   leftIcon,
   rightIcon,
-  borderColor,
+  inputStyle,
   containerStyle,
+  leftIconCardStyle,
+  rightIconCardStyle,
+  renderLeftIcon = null,
+  renderRightIcon = null,
   enableFloatingLabel = false,
+  isLeftIconInsideCard = false,
+  isRightIconInsideCard = false,
   ...textInputProps
 }): React.ReactElement => {
-  const renderIcon = (icon: ImageSourcePropType): React.ReactElement => {
+  const renderIcon = (
+    overrideRenderIconMethod: () => React.ReactElement,
+    icon: ImageSourcePropType,
+    isInsideCard: boolean,
+    iconCardStyle: ViewStyle,
+  ): React.ReactElement => {
+    if (overrideRenderIconMethod) return overrideRenderIconMethod();
     if (icon) return (
-      <IconRenderer source={icon} />
+      <IconRenderer
+        source={icon}
+        cardStyle={iconCardStyle}
+        isInsideCard={isInsideCard}
+      />
     );
     return null;
   }
 
   return (
     <View
-      style={{
-        borderColor,
-        width: '100%',
-        borderWidth: 1,
-        borderRadius: 4,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        backgroundColor: THEME.SECONDARY,
-        paddingVertical: PADDINGS.MEDIUM,
-        paddingHorizontal: PADDINGS.X_SMALL,
-      }}
+      style={StyleSheet.flatten([
+        styles.containerStyle,
+        containerStyle,
+      ])}
     >
-      {renderIcon(leftIcon)}
+      {renderIcon(
+        renderLeftIcon,
+        leftIcon,
+        isLeftIconInsideCard,
+        leftIconCardStyle,
+      )}
       <TextInput
         {...textInputProps}
-        style={{
-          flex: 1,
-          paddingHorizontal: PADDINGS.X_SMALL,
-        }}
+        style={StyleSheet.flatten([
+          styles.inputStyle,
+          inputStyle,
+        ])}
       />
-      {renderIcon(rightIcon)}
+      {renderIcon(
+        renderRightIcon,
+        rightIcon,
+        isRightIconInsideCard,
+        rightIconCardStyle,
+      )}
     </View>
   );
 };

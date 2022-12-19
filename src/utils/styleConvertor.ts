@@ -1,14 +1,17 @@
 /**
  * @param styleToUpdate Specific property on @styleObject
- * @param styleObject A StyleSheet object containing `n` properties
- * @param styleValueToUpdateWith Value used to update @styleToUpdate property
+ * @param stylesToUpdate A StyleSheet array of objects containing `n` properties
+ * and their values to update
  * @returns StylePropertiesObject
  */
 export const covertStyle = (
   styleObject: any,
-  styleToUpdate: string,
-  styleValueToUpdateWith: any,
+  stylesToUpdate: {
+    [key: string]: string
+  }[],
 ) => {
-  styleObject[styleToUpdate] = styleValueToUpdateWith;
+  stylesToUpdate?.forEach(style => {
+    styleObject[Object.keys(style)[0]] = style[Object.keys(style)[0]];
+  })
   return styleObject;
 }
