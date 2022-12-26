@@ -14,10 +14,12 @@ module.exports = {
         extensions: ['.ts', '.tsx', '.json'],
         alias: {
           "@utils": "./src/utils",
+          "@screens": "./src/screens",
           "@images": "./src/assets/images",
           "@components": "./src/components",
         },
       },
     ],
+    'react-native-reanimated/plugin'
   ],
 };

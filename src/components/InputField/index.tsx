@@ -10,12 +10,12 @@ import React, { FC } from 'react';
 import { COLOR_CODE_TYPE, INPUT_TYPE } from '@utils';
 import { IconRenderer } from '../IconRenderer';
 import styles from './styles';
+import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
 interface Props extends TextInputProps {
   type?: INPUT_TYPE;
   inputStyle?: ViewStyle;
   containerStyle?: ViewStyle;
-  enableFloatingLabel?: boolean;
   borderColor?: COLOR_CODE_TYPE;
   leftIconCardStyle?: ViewStyle;
   rightIconCardStyle?: ViewStyle;
@@ -33,7 +33,6 @@ interface Props extends TextInputProps {
  * @param rightIcon(optional) Icon to render of right
  * @param inputStyle(optional) Applied to <TextInput />
  * @param type(optional) Denotes the type of <TextInput> to render. One of INPUT_TYPE
- * @param enableFloatingLabel(optional) Experimental - NOT IMPLEMENTED
  * @param containerStyle(optional) Applied to <View> wrapping TextInput
  * @param borderColor(optional) Border color for <View> wrapping TextInput
  * @param isLeftIconInsideCard(optional) Render @leftIcon inside a Card with border
@@ -55,7 +54,6 @@ export const InputField: FC<Props> = ({
   rightIconCardStyle,
   renderLeftIcon = null,
   renderRightIcon = null,
-  enableFloatingLabel = false,
   isLeftIconInsideCard = false,
   isRightIconInsideCard = false,
   ...textInputProps
@@ -75,6 +73,35 @@ export const InputField: FC<Props> = ({
       />
     );
     return null;
+  }
+
+  if (type === INPUT_TYPE.FLOATING_LABEL) {
+    const labelPosition = useSharedValue(100);
+    
+    const labelStyle = useAnimatedStyle(() => {
+      return {
+        width: labelPosition.value,
+      };
+    }, []);
+    
+    const onFocusEvent = () => labelPosition.value = 200;
+
+    const onBlurEvent = () => labelPosition.value = 100;
+
+    const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
+    
+    return (
+      <AnimatedTextInput
+        {...textInputProps}
+        onFocus={onFocusEvent}
+        onBlur={onBlurEvent}
+        style={StyleSheet.flatten([
+          styles.inputStyle,
+          inputStyle,
+          labelStyle,
+        ])}
+      />
+    );
   }
 
   return (

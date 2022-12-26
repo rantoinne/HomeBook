@@ -59,9 +59,10 @@
     "react-native/no-raw-text": 0,
     "react/no-unescaped-entities": 0,
     "react/prop-types": "off",
-    "space-before-function-paren": 0,
+    "space-before-function-paren": 1,
     "react-native/sort-styles": 0,
-    "react/display-name": 0
+    "react/display-name": 0,
+    "no-irregular-whitespace": "warn"
   },
   "ignorePatterns": "scripts/*.js"
 }

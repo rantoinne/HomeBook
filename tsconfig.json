@@ -16,10 +16,10 @@
     "lib": ["esnext", "dom"],
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    // "typeRoots": ["./src/types"],
     "baseUrl": "./",
     "paths": {
       "@utils": ["src/utils"],
+      "@screens": ["src/screens"],
       "@images": ["src/assets/images"],
       "@components": ["src/components"],
     }
