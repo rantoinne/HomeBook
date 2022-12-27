@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderColor: THEME.OUTLINE,
-    backgroundColor: THEME.PRIMARY,
+    backgroundColor: THEME.OUTLINE,
     justifyContent: 'space-between',
     paddingVertical: PADDINGS.MEDIUM,
     paddingHorizontal: PADDINGS.X_SMALL,

@@ -39,3 +39,10 @@ export enum COLUMN_ALIGNMENT {
   START = 'START',
   CENTER = 'CENTER'
 }
+
+export enum SPACE_DIRECTION {
+  LEFT = 'LEFT',
+  RIGHT = 'RIGHT',
+  TOP = 'TOP',
+  BOTTOM = 'BOTTOM'
+}

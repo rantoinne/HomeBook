@@ -5,12 +5,17 @@ import {
   StyleSheet,
   TextInputProps,
   ImageSourcePropType,
+  LayoutChangeEvent,
 } from 'react-native';
-import React, { FC } from 'react';
-import { COLOR_CODE_TYPE, INPUT_TYPE } from '@utils';
+import React, { FC, useState } from 'react';
+import { BASIC_DIMENSIONS, COLOR_CODE_TYPE, getElementLayout, INPUT_TYPE } from '@utils';
 import { IconRenderer } from '../IconRenderer';
 import styles from './styles';
-import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+} from 'react-native-reanimated';
 
 interface Props extends TextInputProps {
   type?: INPUT_TYPE;
@@ -58,6 +63,11 @@ export const InputField: FC<Props> = ({
   isRightIconInsideCard = false,
   ...textInputProps
 }): React.ReactElement => {
+  const [viewWrapperLayoutDimension, setViewWrapperLayoutDimension] = useState<BASIC_DIMENSIONS>({
+    width: 0,
+    height: 0,
+  });
+  
   const renderIcon = (
     overrideRenderIconMethod: () => React.ReactElement,
     icon: ImageSourcePropType,
@@ -76,31 +86,87 @@ export const InputField: FC<Props> = ({
   }
 
   if (type === INPUT_TYPE.FLOATING_LABEL) {
-    const labelPosition = useSharedValue(100);
+    const labelPosition = useSharedValue(0);
+    const labelWrapperPosition = useSharedValue(0);
     
-    const labelStyle = useAnimatedStyle(() => {
-      return {
-        width: labelPosition.value,
-      };
-    }, []);
-    
-    const onFocusEvent = () => labelPosition.value = 200;
+    const labelAnimatedStyle = useAnimatedStyle(() => ({
+      transform: [
+        {
+          translateY: labelPosition.value,
+        },
+        {
+          translateX: Math.abs(labelPosition.value) * 0.40,
+        },
+      ]
+    }));
 
-    const onBlurEvent = () => labelPosition.value = 100;
+    const labelWrapperAnimatedStyle = useAnimatedStyle(() => ({
+      transform: [{ scaleX: labelWrapperPosition.value }],
+    }));
+    
+    const onFocusEvent = () => {
+      labelWrapperPosition.value = withSpring(1);
+      labelPosition.value = withSpring(-(viewWrapperLayoutDimension.height / 2));
+    }
+
+    const onBlurEvent = () => {
+      labelPosition.value = withSpring(0);
+      labelWrapperPosition.value = withSpring(0);
+    }
 
     const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
+
+    const onInputWrapperLayout = (event: LayoutChangeEvent) => {
+      setViewWrapperLayoutDimension(getElementLayout(event));
+    }
     
     return (
-      <AnimatedTextInput
-        {...textInputProps}
-        onFocus={onFocusEvent}
-        onBlur={onBlurEvent}
+      <View
+        onLayout={onInputWrapperLayout}
         style={StyleSheet.flatten([
-          styles.inputStyle,
-          inputStyle,
-          labelStyle,
+          styles.containerStyle,
+          containerStyle,
         ])}
-      />
+      >
+        {
+          viewWrapperLayoutDimension.height > 0 ? (
+            <>
+              <Animated.Text style={[
+                labelAnimatedStyle,
+                {
+                  color: textInputProps.placeholderTextColor,
+                  zIndex: 10,
+                }
+              ]}>
+                {textInputProps.placeholder}
+              </Animated.Text>
+              <AnimatedTextInput
+                placeholder={null}
+                {...{textInputProps}}
+                onBlur={onBlurEvent}
+                onFocus={onFocusEvent}
+                style={StyleSheet.flatten([
+                  styles.inputStyle,
+                  inputStyle,
+                ])}
+              />
+              <Animated.View
+                style={[
+                  labelWrapperAnimatedStyle,
+                  {
+                    left: 8, // Update required for calculating this value
+                    position: 'absolute',
+                    width: textInputProps.placeholder.length * 8,
+                    top: -(viewWrapperLayoutDimension.height / 40) || 0, // Update required for calculating this value
+                    height: containerStyle?.borderWidth || styles.containerStyle.borderWidth,
+                    backgroundColor: containerStyle?.backgroundColor || styles.containerStyle.backgroundColor,
+                  }
+                ]}
+              />
+            </>
+          ) : null
+        }
+      </View>
     );
   }
 
@@ -118,7 +184,7 @@ export const InputField: FC<Props> = ({
         leftIconCardStyle,
       )}
       <TextInput
-        {...textInputProps}
+        {...{textInputProps}}
         style={StyleSheet.flatten([
           styles.inputStyle,
           inputStyle,

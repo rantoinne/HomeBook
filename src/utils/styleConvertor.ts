@@ -1,3 +1,5 @@
+import { SPACE_DIRECTION } from "./enums";
+
 /**
  * @param styleToUpdate Specific property on @styleObject
  * @param stylesToUpdate A StyleSheet array of objects containing `n` properties
@@ -15,3 +17,10 @@ export const convertStyle = (
   })
   return styleObject;
 }
+
+export const getStyleMarginsFrom = (
+  direction: SPACE_DIRECTION,
+  styleObject: { [key: string]: string | number },
+): number => {
+  return 0;
+};
