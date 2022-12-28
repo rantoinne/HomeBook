@@ -1,13 +1,13 @@
 import {
-  View,
   TextInput,
   ViewStyle,
   StyleSheet,
   TextInputProps,
   ImageSourcePropType,
   LayoutChangeEvent,
+  TouchableOpacity,
 } from 'react-native';
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useRef } from 'react';
 import { BASIC_DIMENSIONS, COLOR_CODE_TYPE, getElementLayout, INPUT_TYPE } from '@utils';
 import { IconRenderer } from '../IconRenderer';
 import styles from './styles';
@@ -64,9 +64,12 @@ export const InputField: FC<Props> = ({
   ...textInputProps
 }): React.ReactElement => {
   const [viewWrapperLayoutDimension, setViewWrapperLayoutDimension] = useState<BASIC_DIMENSIONS>({
+    y: 0,
     width: 0,
     height: 0,
   });
+
+  const inputRef = useRef<TextInput>();
   
   const renderIcon = (
     overrideRenderIconMethod: () => React.ReactElement,
@@ -85,6 +88,8 @@ export const InputField: FC<Props> = ({
     return null;
   }
 
+  const focusInputField = () => !inputRef.current.isFocused() && inputRef.current.focus();
+
   if (type === INPUT_TYPE.FLOATING_LABEL) {
     const labelPosition = useSharedValue(0);
     const labelWrapperPosition = useSharedValue(0);
@@ -101,7 +106,11 @@ export const InputField: FC<Props> = ({
     }));
 
     const labelWrapperAnimatedStyle = useAnimatedStyle(() => ({
-      transform: [{ scaleX: labelWrapperPosition.value }],
+      transform: [{
+        scaleX: labelWrapperPosition.value,
+      }, {
+        translateX: Math.abs(labelPosition.value) * 0.40,
+      }],
     }));
     
     const onFocusEvent = () => {
@@ -110,8 +119,10 @@ export const InputField: FC<Props> = ({
     }
 
     const onBlurEvent = () => {
-      labelPosition.value = withSpring(0);
-      labelWrapperPosition.value = withSpring(0);
+      if (textInputProps.value.length === 0) {
+        labelPosition.value = withSpring(0);
+        labelWrapperPosition.value = withSpring(0);
+      }
     }
 
     const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
@@ -121,7 +132,8 @@ export const InputField: FC<Props> = ({
     }
     
     return (
-      <View
+      <TouchableOpacity
+        onPress={focusInputField}
         onLayout={onInputWrapperLayout}
         style={StyleSheet.flatten([
           styles.containerStyle,
@@ -141,6 +153,8 @@ export const InputField: FC<Props> = ({
                 {textInputProps.placeholder}
               </Animated.Text>
               <AnimatedTextInput
+                ref={inputRef}
+                value={textInputProps.value}
                 placeholder={null}
                 {...{textInputProps}}
                 onBlur={onBlurEvent}
@@ -154,10 +168,9 @@ export const InputField: FC<Props> = ({
                 style={[
                   labelWrapperAnimatedStyle,
                   {
-                    left: 8, // Update required for calculating this value
+                    top: -1,
                     position: 'absolute',
                     width: textInputProps.placeholder.length * 8,
-                    top: -(viewWrapperLayoutDimension.height / 40) || 0, // Update required for calculating this value
                     height: containerStyle?.borderWidth || styles.containerStyle.borderWidth,
                     backgroundColor: containerStyle?.backgroundColor || styles.containerStyle.backgroundColor,
                   }
@@ -166,17 +179,19 @@ export const InputField: FC<Props> = ({
             </>
           ) : null
         }
-      </View>
+      </TouchableOpacity>
     );
   }
 
   return (
-    <View
+    <TouchableOpacity
       style={StyleSheet.flatten([
         styles.containerStyle,
         containerStyle,
       ])}
+      onPress={focusInputField}
     >
+      <>
       {renderIcon(
         renderLeftIcon,
         leftIcon,
@@ -184,6 +199,7 @@ export const InputField: FC<Props> = ({
         leftIconCardStyle,
       )}
       <TextInput
+        ref={inputRef}
         {...{textInputProps}}
         style={StyleSheet.flatten([
           styles.inputStyle,
@@ -196,6 +212,7 @@ export const InputField: FC<Props> = ({
         isRightIconInsideCard,
         rightIconCardStyle,
       )}
-    </View>
+      </>
+    </TouchableOpacity>
   );
 };

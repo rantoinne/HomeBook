@@ -15,7 +15,7 @@ export const Onboarding: FC<Props> = ({
   return (
     <GradientWrapper>
       <Text>Onboarding Screens</Text>
-      <InputField
+      {/* <InputField
         value={inputValue}
         placeholder="Type Here!"
         placeholderTextColor={THEME.SECONDARY}
@@ -29,14 +29,14 @@ export const Onboarding: FC<Props> = ({
         placeholderTextColor={'orange'}
         type={INPUT_TYPE.FLOATING_LABEL}
         onChangeText={val => setInputValue(val)}
-      />
+      /> */}
       <View style={{ marginVertical: 8 }} />
       <InputField
         value={inputValue}
-        placeholder="Type Here!"
+        placeholder="Type Here! HEYEYEY"
         placeholderTextColor={THEME.SECONDARY}
         type={INPUT_TYPE.FLOATING_LABEL}
-        containerStyle={{ backgroundColor: 'cyan' }}
+        containerStyle={{ backgroundColor: 'white', borderColor: 'red', height: 90 }}
         onChangeText={val => setInputValue(val)}
       />
       <View style={{ marginVertical: 8 }} />
@@ -45,6 +45,7 @@ export const Onboarding: FC<Props> = ({
         placeholder="Type Here!"
         placeholderTextColor={THEME.SECONDARY}
         type={INPUT_TYPE.FLOATING_LABEL}
+        containerStyle={{ backgroundColor: 'white', borderColor: 'red' }}
         onChangeText={val => setInputValue(val)}
       />
       <View style={{ marginVertical: 8 }} />
