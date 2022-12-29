@@ -12,9 +12,9 @@ import { BASIC_DIMENSIONS, COLOR_CODE_TYPE, getElementLayout, INPUT_TYPE } from 
 import { IconRenderer } from '../IconRenderer';
 import styles from './styles';
 import Animated, {
+  withSpring,
   useSharedValue,
   useAnimatedStyle,
-  withSpring,
 } from 'react-native-reanimated';
 
 interface Props extends TextInputProps {
@@ -68,6 +68,11 @@ export const InputField: FC<Props> = ({
     width: 0,
     height: 0,
   });
+  const [inputLabelTextLayoutDimension, setInputLabelTextLayoutDimension] = useState<BASIC_DIMENSIONS>({
+    y: 0,
+    width: 0,
+    height: 0,
+  });
 
   const inputRef = useRef<TextInput>();
   
@@ -93,6 +98,9 @@ export const InputField: FC<Props> = ({
   if (type === INPUT_TYPE.FLOATING_LABEL) {
     const labelPosition = useSharedValue(0);
     const labelWrapperPosition = useSharedValue(0);
+
+    const LABEL_LEFT_SPACING = 10;
+    const LABEL_WRAPPER_LEFT_SPACING = 7;
     
     const labelAnimatedStyle = useAnimatedStyle(() => ({
       transform: [
@@ -100,7 +108,7 @@ export const InputField: FC<Props> = ({
           translateY: labelPosition.value,
         },
         {
-          translateX: Math.abs(labelPosition.value) * 0.40,
+          translateX: LABEL_LEFT_SPACING,
         },
       ]
     }));
@@ -109,26 +117,32 @@ export const InputField: FC<Props> = ({
       transform: [{
         scaleX: labelWrapperPosition.value,
       }, {
-        translateX: Math.abs(labelPosition.value) * 0.40,
+        translateX: LABEL_WRAPPER_LEFT_SPACING,
       }],
     }));
+
+    const isInputValueLengthZero = textInputProps.value.length === 0;
     
     const onFocusEvent = () => {
-      labelWrapperPosition.value = withSpring(1);
-      labelPosition.value = withSpring(-(viewWrapperLayoutDimension.height / 2));
-    }
-
-    const onBlurEvent = () => {
-      if (textInputProps.value.length === 0) {
-        labelPosition.value = withSpring(0);
-        labelWrapperPosition.value = withSpring(0);
+      if (isInputValueLengthZero) {
+        labelWrapperPosition.value = withSpring(1, { damping: 20 });
+        labelPosition.value = withSpring(-(viewWrapperLayoutDimension.height / 2), { damping: 15 });
       }
     }
 
-    const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
+    const onBlurEvent = () => {
+      if (isInputValueLengthZero) {
+        labelPosition.value = withSpring(0, { damping: 15 });
+        labelWrapperPosition.value = withSpring(0, { damping: 20 });
+      }
+    }
 
     const onInputWrapperLayout = (event: LayoutChangeEvent) => {
       setViewWrapperLayoutDimension(getElementLayout(event));
+    }
+
+    const onInputLabelTextLayout = (event: LayoutChangeEvent) => {
+      setInputLabelTextLayoutDimension(getElementLayout(event));
     }
     
     return (
@@ -143,20 +157,10 @@ export const InputField: FC<Props> = ({
         {
           viewWrapperLayoutDimension.height > 0 ? (
             <>
-              <Animated.Text style={[
-                labelAnimatedStyle,
-                {
-                  color: textInputProps.placeholderTextColor,
-                  zIndex: 10,
-                }
-              ]}>
-                {textInputProps.placeholder}
-              </Animated.Text>
-              <AnimatedTextInput
+              <TextInput
                 ref={inputRef}
-                value={textInputProps.value}
+                {...textInputProps}
                 placeholder={null}
-                {...{textInputProps}}
                 onBlur={onBlurEvent}
                 onFocus={onFocusEvent}
                 style={StyleSheet.flatten([
@@ -164,13 +168,25 @@ export const InputField: FC<Props> = ({
                   inputStyle,
                 ])}
               />
+              <Animated.Text
+                onLayout={onInputLabelTextLayout}
+                style={[
+                labelAnimatedStyle,
+                {
+                  color: textInputProps.placeholderTextColor,
+                  zIndex: 10,
+                  position: 'absolute',
+                }
+              ]}>
+                {textInputProps.placeholder}
+              </Animated.Text>
               <Animated.View
                 style={[
                   labelWrapperAnimatedStyle,
                   {
-                    top: -1,
+                    top: -(containerStyle?.borderWidth || styles.containerStyle.borderWidth),
                     position: 'absolute',
-                    width: textInputProps.placeholder.length * 8,
+                    width: inputLabelTextLayoutDimension.width + 8,
                     height: containerStyle?.borderWidth || styles.containerStyle.borderWidth,
                     backgroundColor: containerStyle?.backgroundColor || styles.containerStyle.backgroundColor,
                   }

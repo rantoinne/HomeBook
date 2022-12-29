@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { GradientWrapper, InputField } from '@components';
 import { INPUT_TYPE, THEME } from '@utils';
 
@@ -13,31 +13,22 @@ export const Onboarding: FC<Props> = ({
   const [inputValue, setInputValue] = useState<string>('');
   
   return (
-    <GradientWrapper>
-      <Text>Onboarding Screens</Text>
-      {/* <InputField
-        value={inputValue}
-        placeholder="Type Here!"
-        placeholderTextColor={THEME.SECONDARY}
-        type={INPUT_TYPE.FLOATING_LABEL}
-        onChangeText={val => setInputValue(val)}
-      />
+    <GradientWrapper isScrollEnabled containerStyle={{ justifyContent: 'flex-start' }}>
+      <View style={{ marginVertical: 8 }} />
+      <View style={{ marginVertical: 8 }} />
+      <View style={{ marginVertical: 8 }} />
+      <View style={{ marginVertical: 8 }} />
+      <View style={{ marginVertical: 8 }} />
+      <View style={{ marginVertical: 8 }} />
+      <View style={{ marginVertical: 8 }} />
       <View style={{ marginVertical: 8 }} />
       <InputField
         value={inputValue}
-        placeholder="Type Here!"
-        placeholderTextColor={'orange'}
+        onChangeText={setInputValue}
         type={INPUT_TYPE.FLOATING_LABEL}
-        onChangeText={val => setInputValue(val)}
-      /> */}
-      <View style={{ marginVertical: 8 }} />
-      <InputField
-        value={inputValue}
         placeholder="Type Here! HEYEYEY"
         placeholderTextColor={THEME.SECONDARY}
-        type={INPUT_TYPE.FLOATING_LABEL}
         containerStyle={{ backgroundColor: 'white', borderColor: 'red', height: 90 }}
-        onChangeText={val => setInputValue(val)}
       />
       <View style={{ marginVertical: 8 }} />
       <InputField
@@ -46,23 +37,45 @@ export const Onboarding: FC<Props> = ({
         placeholderTextColor={THEME.SECONDARY}
         type={INPUT_TYPE.FLOATING_LABEL}
         containerStyle={{ backgroundColor: 'white', borderColor: 'red' }}
-        onChangeText={val => setInputValue(val)}
+        onChangeText={setInputValue}
       />
       <View style={{ marginVertical: 8 }} />
       <InputField
         value={inputValue}
-        placeholder="Type Here!"
+        placeholder="1"
         placeholderTextColor={THEME.SECONDARY}
         type={INPUT_TYPE.FLOATING_LABEL}
-        onChangeText={val => setInputValue(val)}
+        containerStyle={{ backgroundColor: 'white', borderColor: 'red' }}
+        onChangeText={setInputValue}
       />
       <View style={{ marginVertical: 8 }} />
       <InputField
         value={inputValue}
-        placeholder="Type Here!"
-        type={INPUT_TYPE.OUTLINE}
-        onChangeText={val => setInputValue(val)}
+        placeholder="Type Here! Type Here!"
+        placeholderTextColor={THEME.SECONDARY}
+        type={INPUT_TYPE.FLOATING_LABEL}
+        containerStyle={{ backgroundColor: 'white', borderColor: 'red' }}
+        onChangeText={setInputValue}
       />
+      <View style={{ marginVertical: 8 }} />
+      <InputField
+        value={inputValue}
+        placeholder="Type Here!ssa"
+        placeholderTextColor={THEME.SECONDARY}
+        type={INPUT_TYPE.FLOATING_LABEL}
+        containerStyle={{ backgroundColor: 'white', borderColor: 'red' }}
+        onChangeText={setInputValue}
+      />
+      <View style={{ marginVertical: 8 }} />
+      <InputField
+        value={inputValue}
+        placeholder="Type Here! AA KJHSjkahsjaoijslakslka"
+        placeholderTextColor="violet"
+        type={INPUT_TYPE.FLOATING_LABEL}
+        containerStyle={{ backgroundColor: 'white', borderColor: 'violet', borderWidth: 4 }}
+        onChangeText={setInputValue}
+      />
+      <View style={{ marginVertical: 8 }} />
     </GradientWrapper>
   );
 };
