@@ -9,8 +9,8 @@ import { SPACE_DIRECTION } from "./enums";
 export const convertStyle = (
   styleObject: any,
   stylesToUpdate: {
-    [key: string]: string
-  }[],
+    [key: string]: string | number
+  }[], // Should be infact an Object similar to StyleSheet const
 ) => {
   stylesToUpdate?.forEach(style => {
     styleObject[Object.keys(style)[0]] = style[Object.keys(style)[0]];

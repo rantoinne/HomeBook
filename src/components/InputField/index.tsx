@@ -6,13 +6,21 @@ import {
   ImageSourcePropType,
   LayoutChangeEvent,
   TouchableOpacity,
+  View,
 } from 'react-native';
 import React, { FC, useState, useRef } from 'react';
-import { BASIC_DIMENSIONS, COLOR_CODE_TYPE, getElementLayout, INPUT_TYPE } from '@utils';
+import {
+  INPUT_TYPE,
+  convertStyle,
+  COLOR_CODE_TYPE,
+  BASIC_DIMENSIONS,
+  getElementLayout,
+} from '@utils';
 import { IconRenderer } from '../IconRenderer';
 import styles from './styles';
 import Animated, {
   withSpring,
+  withTiming,
   useSharedValue,
   useAnimatedStyle,
 } from 'react-native-reanimated';
@@ -75,6 +83,14 @@ export const InputField: FC<Props> = ({
   });
 
   const inputRef = useRef<TextInput>();
+
+  const onInputWrapperLayout = (event: LayoutChangeEvent) => {
+    setViewWrapperLayoutDimension(getElementLayout(event));
+  }
+
+  const onInputLabelTextLayout = (event: LayoutChangeEvent) => {
+    setInputLabelTextLayoutDimension(getElementLayout(event));
+  }
   
   const renderIcon = (
     overrideRenderIconMethod: () => React.ReactElement,
@@ -136,14 +152,6 @@ export const InputField: FC<Props> = ({
         labelWrapperPosition.value = withSpring(0, { damping: 20 });
       }
     }
-
-    const onInputWrapperLayout = (event: LayoutChangeEvent) => {
-      setViewWrapperLayoutDimension(getElementLayout(event));
-    }
-
-    const onInputLabelTextLayout = (event: LayoutChangeEvent) => {
-      setInputLabelTextLayoutDimension(getElementLayout(event));
-    }
     
     return (
       <TouchableOpacity
@@ -172,21 +180,18 @@ export const InputField: FC<Props> = ({
                 onLayout={onInputLabelTextLayout}
                 style={[
                 labelAnimatedStyle,
-                {
-                  color: textInputProps.placeholderTextColor,
-                  zIndex: 10,
-                  position: 'absolute',
-                }
+                styles.labelStyle,
+                { color: textInputProps.placeholderTextColor }
               ]}>
                 {textInputProps.placeholder}
               </Animated.Text>
               <Animated.View
                 style={[
                   labelWrapperAnimatedStyle,
+                  styles.absoluteStyle,
                   {
-                    top: -(containerStyle?.borderWidth || styles.containerStyle.borderWidth),
-                    position: 'absolute',
                     width: inputLabelTextLayoutDimension.width + 8,
+                    top: -(containerStyle?.borderWidth || styles.containerStyle.borderWidth),
                     height: containerStyle?.borderWidth || styles.containerStyle.borderWidth,
                     backgroundColor: containerStyle?.backgroundColor || styles.containerStyle.backgroundColor,
                   }
@@ -199,36 +204,98 @@ export const InputField: FC<Props> = ({
     );
   }
 
-  return (
-    <TouchableOpacity
-      style={StyleSheet.flatten([
-        styles.containerStyle,
-        containerStyle,
-      ])}
-      onPress={focusInputField}
-    >
-      <>
-      {renderIcon(
-        renderLeftIcon,
-        leftIcon,
-        isLeftIconInsideCard,
-        leftIconCardStyle,
-      )}
-      <TextInput
-        ref={inputRef}
-        {...{textInputProps}}
+  if (type === INPUT_TYPE.UNDERLINE) {
+    const inputUnderlinePosition = useSharedValue(0);
+
+    const inputAnimatedStyle = useAnimatedStyle(() => ({
+      transform: [{ scaleX: inputUnderlinePosition.value }]
+    }));
+    
+    const onFocusEvent = () => {
+      inputUnderlinePosition.value = withTiming(1, { duration: 350 });
+    }
+
+    const onBlurEvent = () => {
+      inputUnderlinePosition.value = withTiming(0, { duration: 350 });
+    }
+
+    let inputWrapperStyle = Object.keys(containerStyle).length > 0
+      ?  {...styles.containerStyle, ...containerStyle}
+      : styles.containerStyle;
+
+    inputWrapperStyle = convertStyle(
+      inputWrapperStyle,
+      [{
+        borderWidth: 0,
+      }, {
+        borderColor: null
+      }]
+    );
+    
+    return (
+      <View style={styles.completeWidth}>
+        <TouchableOpacity style={inputWrapperStyle} onLayout={onInputWrapperLayout}>
+        <TextInput
+          ref={inputRef}
+          {...textInputProps}
+          onBlur={onBlurEvent}
+          onFocus={onFocusEvent}
+          style={StyleSheet.flatten([
+            styles.inputStyle,
+            inputStyle,
+          ])}
+        />
+        </TouchableOpacity>
+        <Animated.View
+          style={[
+            styles.absoluteStyle,
+            styles.underlineStyle,
+            {
+              width: viewWrapperLayoutDimension.width,
+              height: containerStyle.borderWidth || styles.containerStyle.borderWidth,
+              backgroundColor: containerStyle.borderColor || styles.containerStyle.borderColor,
+            },
+            inputAnimatedStyle,
+          ]}
+        />
+      </View>
+    );
+  }
+
+  if (type === INPUT_TYPE.OUTLINE) {
+    return (
+      <TouchableOpacity
         style={StyleSheet.flatten([
-          styles.inputStyle,
-          inputStyle,
+          styles.containerStyle,
+          containerStyle,
         ])}
-      />
-      {renderIcon(
-        renderRightIcon,
-        rightIcon,
-        isRightIconInsideCard,
-        rightIconCardStyle,
-      )}
-      </>
-    </TouchableOpacity>
-  );
+        onPress={focusInputField}
+      >
+        <>
+        {renderIcon(
+          renderLeftIcon,
+          leftIcon,
+          isLeftIconInsideCard,
+          leftIconCardStyle,
+        )}
+        <TextInput
+          ref={inputRef}
+          {...{textInputProps}}
+          style={StyleSheet.flatten([
+            styles.inputStyle,
+            inputStyle,
+          ])}
+        />
+        {renderIcon(
+          renderRightIcon,
+          rightIcon,
+          isRightIconInsideCard,
+          rightIconCardStyle,
+        )}
+        </>
+      </TouchableOpacity>
+    );
+  }
+
+  return null;
 };

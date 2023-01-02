@@ -46,3 +46,8 @@ export enum SPACE_DIRECTION {
   TOP = 'TOP',
   BOTTOM = 'BOTTOM'
 }
+
+export enum ANIMATION_TYPE {
+  TIMING = 'TIMING',
+  SPRING = 'SPRING',
+}

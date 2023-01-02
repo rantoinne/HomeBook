@@ -16,19 +16,19 @@ export const Onboarding: FC<Props> = ({
     <GradientWrapper isScrollEnabled containerStyle={{ justifyContent: 'flex-start' }}>
       <View style={{ marginVertical: 8 }} />
       <View style={{ marginVertical: 8 }} />
+      {/* <View style={{ marginVertical: 8 }} />
       <View style={{ marginVertical: 8 }} />
       <View style={{ marginVertical: 8 }} />
       <View style={{ marginVertical: 8 }} />
-      <View style={{ marginVertical: 8 }} />
-      <View style={{ marginVertical: 8 }} />
+      <View style={{ marginVertical: 8 }} /> */}
       <View style={{ marginVertical: 8 }} />
       <InputField
         value={inputValue}
         onChangeText={setInputValue}
-        type={INPUT_TYPE.FLOATING_LABEL}
+        type={INPUT_TYPE.UNDERLINE}
         placeholder="Type Here! HEYEYEY"
         placeholderTextColor={THEME.SECONDARY}
-        containerStyle={{ backgroundColor: 'white', borderColor: 'red', height: 90 }}
+        containerStyle={{ width: '90%', backgroundColor: 'white', borderColor: 'cyan' }}
       />
       <View style={{ marginVertical: 8 }} />
       <InputField
@@ -36,7 +36,7 @@ export const Onboarding: FC<Props> = ({
         placeholder="Type Here!"
         placeholderTextColor={THEME.SECONDARY}
         type={INPUT_TYPE.FLOATING_LABEL}
-        containerStyle={{ backgroundColor: 'white', borderColor: 'red' }}
+        containerStyle={{ width: '90%', backgroundColor: 'white', borderColor: 'red' }}
         onChangeText={setInputValue}
       />
       <View style={{ marginVertical: 8 }} />

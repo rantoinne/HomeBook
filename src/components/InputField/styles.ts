@@ -18,6 +18,21 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: PADDINGS.X_SMALL,
   },
+  labelStyle: {
+    zIndex: 10,
+    position: 'absolute',
+  },
+  absoluteStyle: {
+    position: 'absolute',
+  },
+  underlineStyle: {
+    bottom: 0,
+    zIndex: 200,
+    width: '100%',
+  },
+  completeWidth: {
+    width: '100%',
+  },
 });
 
 export default styles;
