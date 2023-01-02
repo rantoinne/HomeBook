@@ -15,8 +15,9 @@ import {
   COLOR_CODE_TYPE,
   BASIC_DIMENSIONS,
   getElementLayout,
+  IMAGE_DIMENSIONS,
 } from '@utils';
-import { IconRenderer } from '../IconRenderer';
+import { IconRenderer } from '@components';
 import styles from './styles';
 import Animated, {
   withSpring,
@@ -108,12 +109,17 @@ export const InputField: FC<Props> = ({
     );
     return null;
   }
-
+  
   const focusInputField = () => !inputRef.current.isFocused() && inputRef.current.focus();
 
   if (type === INPUT_TYPE.FLOATING_LABEL) {
-    const labelPosition = useSharedValue(0);
     const labelWrapperPosition = useSharedValue(0);
+    const labelVerticalPosition = useSharedValue(0);
+    const labelHorizontalPosition = useSharedValue(
+      Number(leftIcon
+        ? Number(leftIconCardStyle?.width || IMAGE_DIMENSIONS.REGULAR) + (isLeftIconInsideCard ? 4 : 0)
+        : 0)
+    );
 
     const LABEL_LEFT_SPACING = 10;
     const LABEL_WRAPPER_LEFT_SPACING = 7;
@@ -121,10 +127,10 @@ export const InputField: FC<Props> = ({
     const labelAnimatedStyle = useAnimatedStyle(() => ({
       transform: [
         {
-          translateY: labelPosition.value,
+          translateY: labelVerticalPosition.value,
         },
         {
-          translateX: LABEL_LEFT_SPACING,
+          translateX: labelHorizontalPosition.value + LABEL_LEFT_SPACING,
         },
       ]
     }));
@@ -141,15 +147,26 @@ export const InputField: FC<Props> = ({
     
     const onFocusEvent = () => {
       if (isInputValueLengthZero) {
-        labelWrapperPosition.value = withSpring(1, { damping: 20 });
-        labelPosition.value = withSpring(-(viewWrapperLayoutDimension.height / 2), { damping: 15 });
+        const horizontalDimension = labelHorizontalPosition.value - Number(leftIcon
+          ? Number(leftIconCardStyle?.width || IMAGE_DIMENSIONS.REGULAR) + (isLeftIconInsideCard ? 4 : 0)
+          : 0);
+          labelVerticalPosition.value = withTiming(-(viewWrapperLayoutDimension.height / 2), {
+            duration: 200
+          });
+          labelHorizontalPosition.value = withSpring(horizontalDimension, { damping: 20 });
+          labelWrapperPosition.value = withSpring(1, { damping: 20 });
       }
     }
 
     const onBlurEvent = () => {
       if (isInputValueLengthZero) {
-        labelPosition.value = withSpring(0, { damping: 15 });
         labelWrapperPosition.value = withSpring(0, { damping: 20 });
+        labelVerticalPosition.value = withSpring(0, { damping: 15 });
+        labelHorizontalPosition.value = withTiming(Number(leftIcon
+          ? Number(leftIconCardStyle?.width || IMAGE_DIMENSIONS.REGULAR) + (isLeftIconInsideCard ? 4 : 0)
+          : 0), {
+          duration: 200,
+        })
       }
     }
     
@@ -165,6 +182,12 @@ export const InputField: FC<Props> = ({
         {
           viewWrapperLayoutDimension.height > 0 ? (
             <>
+              {renderIcon(
+                renderLeftIcon,
+                leftIcon,
+                isLeftIconInsideCard,
+                leftIconCardStyle,
+              )}
               <TextInput
                 ref={inputRef}
                 {...textInputProps}
@@ -176,12 +199,20 @@ export const InputField: FC<Props> = ({
                   inputStyle,
                 ])}
               />
+              {renderIcon(
+                renderLeftIcon,
+                leftIcon,
+                isLeftIconInsideCard,
+                leftIconCardStyle,
+              )}
               <Animated.Text
                 onLayout={onInputLabelTextLayout}
                 style={[
                 labelAnimatedStyle,
                 styles.labelStyle,
-                { color: textInputProps.placeholderTextColor }
+                {
+                  color: textInputProps.placeholderTextColor,
+                }
               ]}>
                 {textInputProps.placeholder}
               </Animated.Text>
@@ -234,7 +265,17 @@ export const InputField: FC<Props> = ({
     
     return (
       <View style={styles.completeWidth}>
-        <TouchableOpacity style={inputWrapperStyle} onLayout={onInputWrapperLayout}>
+        <TouchableOpacity
+          style={inputWrapperStyle}
+          onLayout={onInputWrapperLayout}
+          onPress={focusInputField}
+        >
+        {renderIcon(
+          renderLeftIcon,
+          leftIcon,
+          isLeftIconInsideCard,
+          leftIconCardStyle,
+        )}
         <TextInput
           ref={inputRef}
           {...textInputProps}
@@ -245,6 +286,12 @@ export const InputField: FC<Props> = ({
             inputStyle,
           ])}
         />
+        {renderIcon(
+          renderRightIcon,
+          rightIcon,
+          isRightIconInsideCard,
+          rightIconCardStyle,
+        )}
         </TouchableOpacity>
         <Animated.View
           style={[

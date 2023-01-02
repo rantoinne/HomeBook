@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react';
 import { View } from 'react-native';
 import { GradientWrapper, InputField } from '@components';
 import { INPUT_TYPE, THEME } from '@utils';
+import { ImageLinks } from '@images';
 
 interface Props {
   
@@ -26,9 +27,11 @@ export const Onboarding: FC<Props> = ({
         value={inputValue}
         onChangeText={setInputValue}
         type={INPUT_TYPE.UNDERLINE}
+        leftIcon={ImageLinks.homeBookIcon}
+        rightIcon={ImageLinks.homeBookIcon}
         placeholder="Type Here! HEYEYEY"
         placeholderTextColor={THEME.SECONDARY}
-        containerStyle={{ width: '90%', backgroundColor: 'white', borderColor: 'cyan' }}
+        containerStyle={{ width: '100%', backgroundColor: 'white', borderWidth: 2, borderColor: 'violet' }}
       />
       <View style={{ marginVertical: 8 }} />
       <InputField
@@ -36,6 +39,8 @@ export const Onboarding: FC<Props> = ({
         placeholder="Type Here!"
         placeholderTextColor={THEME.SECONDARY}
         type={INPUT_TYPE.FLOATING_LABEL}
+        leftIcon={ImageLinks.homeBookIcon}
+        isLeftIconInsideCard
         containerStyle={{ width: '90%', backgroundColor: 'white', borderColor: 'red' }}
         onChangeText={setInputValue}
       />
@@ -71,6 +76,7 @@ export const Onboarding: FC<Props> = ({
         value={inputValue}
         placeholder="Type Here! AA KJHSjkahsjaoijslakslka"
         placeholderTextColor="violet"
+        leftIcon={ImageLinks.homeBookIcon}
         type={INPUT_TYPE.FLOATING_LABEL}
         containerStyle={{ backgroundColor: 'white', borderColor: 'violet', borderWidth: 4 }}
         onChangeText={setInputValue}

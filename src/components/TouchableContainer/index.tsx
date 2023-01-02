@@ -3,6 +3,7 @@ import {
   StyleSheet,
   TouchableWithoutFeedbackProps,
   TouchableWithoutFeedback,
+  View,
 } from 'react-native';
 import React, { FC, PropsWithChildren } from 'react';
 
@@ -19,18 +20,25 @@ interface Props extends TouchableWithoutFeedbackProps {
  * @returns A card with shadow
  */
 export const TouchableContainer: FC<PropsWithChildren<Props>> = ({
+  onLayout,
   containerStyle,
   children = <></>,
   ...touchableProps
 }): React.ReactElement => {
   return (
-    <TouchableWithoutFeedback
-      {...{touchableProps}}
+    <View
+      onLayout={onLayout}
       style={StyleSheet.flatten([styles.containerStyle, containerStyle])}
     >
-      <>
-        {children}
-      </>
-    </TouchableWithoutFeedback>
+      <TouchableWithoutFeedback
+        {...touchableProps}
+        onPress={touchableProps.onPress}
+        style={StyleSheet.flatten([styles.containerStyle])}
+      >
+        <>
+          {children}
+        </>
+      </TouchableWithoutFeedback>
+    </View>
   );
 };
