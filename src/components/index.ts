@@ -1,3 +1,4 @@
+export * from './Carousel';
 export * from './InputField';
 export * from './IconRenderer';
 export * from './ElevatedCard';

@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  fullFlex: { flex: 1 },
 });
 
 export default styles;
