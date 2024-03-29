@@ -1,4 +1,4 @@
-import React, { FC, useRef } from 'react';
+import React, { FC, useMemo, useRef } from 'react';
 import { View, FlatList, Text } from 'react-native';
 import styles from './styles';
 
@@ -36,9 +36,15 @@ export const Carousel: FC<Props> = ({
 }) => {
   const flatListRef = useRef<FlatList>(null);
 
+  let scrollIndex = useMemo(() => 0, []);
+
   const renderItem = ({ item }) => (
     <Item title={item.title} />
   );
+
+  const getScrollHandle = () => {
+    return flatListRef.current;
+  }
 
   return (
     <>

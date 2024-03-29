@@ -16,6 +16,7 @@ import {
   BASIC_DIMENSIONS,
   getElementLayout,
   IMAGE_DIMENSIONS,
+  DIMENSION_DEFAULT_VALUES,
 } from '@utils';
 import { IconRenderer } from '@components';
 import styles from './styles';
@@ -46,10 +47,10 @@ interface Props extends TextInputProps {
  * @param leftIcon(optional) Icon to render of left
  * @param rightIcon(optional) Icon to render of right
  * @param inputStyle(optional) Applied to <TextInput />
- * @param type(optional) Denotes the type of <TextInput> to render. One of INPUT_TYPE
  * @param containerStyle(optional) Applied to <View> wrapping TextInput
  * @param borderColor(optional) Border color for <View> wrapping TextInput
  * @param isLeftIconInsideCard(optional) Render @leftIcon inside a Card with border
+ * @param type(optional) Denotes the type of <TextInput> to render. One of INPUT_TYPE
  * @param isRightIconInsideCard(optional) Render @rightIcon inside a Card with border
  * @param leftIconCardStyle(optional) Applied to left icon. Requires @leftIcon to be NOT NULL
  * @param rightIconCardStyle(optional) Applied to right icon. Requires @rightIcon to be NOT NULL
@@ -72,16 +73,14 @@ export const InputField: FC<Props> = ({
   isRightIconInsideCard = false,
   ...textInputProps
 }): React.ReactElement => {
-  const [viewWrapperLayoutDimension, setViewWrapperLayoutDimension] = useState<BASIC_DIMENSIONS>({
-    y: 0,
-    width: 0,
-    height: 0,
-  });
-  const [inputLabelTextLayoutDimension, setInputLabelTextLayoutDimension] = useState<BASIC_DIMENSIONS>({
-    y: 0,
-    width: 0,
-    height: 0,
-  });
+  const [
+    viewWrapperLayoutDimension,
+    setViewWrapperLayoutDimension,
+  ] = useState<BASIC_DIMENSIONS>(DIMENSION_DEFAULT_VALUES);
+  const [
+    inputLabelTextLayoutDimension,
+    setInputLabelTextLayoutDimension,
+  ] = useState<BASIC_DIMENSIONS>(DIMENSION_DEFAULT_VALUES);
 
   const inputRef = useRef<TextInput>();
 
